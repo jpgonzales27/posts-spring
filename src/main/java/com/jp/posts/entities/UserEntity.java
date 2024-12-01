@@ -8,7 +8,7 @@ import lombok.ToString;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Entity
-@Table(name = "AppUser")
+@Table(name = "App_User") //AppUser = App_User
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +21,7 @@ public class UserEntity {
 
     private String name;
     private Integer age;
-    private String email;
+    private String mail;
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
