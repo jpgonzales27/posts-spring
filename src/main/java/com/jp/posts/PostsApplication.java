@@ -10,23 +10,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PostsApplication implements CommandLineRunner {
 
-	@Autowired
-	private PageService pageService;
+    @Autowired
+    private PageService pageService;
 
-	public static void main(String[] args) {
-		SpringApplication.run(PostsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PostsApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		var request = PageRequest
-				.builder()
-				.userId(4L)
-				.title("Juan Gonzales")
-				.build();
+    @Override
+    public void run(String... args) throws Exception {
+        var request = PageRequest
+                .builder()
+                .userId(4L)
+                .title("Juan Gonzales")
+                .build();
 
-		var response = pageService.create(request);
-
-		System.out.println(response);
-	}
+//		var response = pageService.create(request);
+        var response = pageService.readByTitle("User2 Page");
+        System.out.println(response);
+    }
 }

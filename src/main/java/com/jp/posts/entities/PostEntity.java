@@ -24,5 +24,5 @@ public class PostEntity {
 
     private LocalDateTime dateCreation;
     private String content;
-    private String image;
+    private String img;
 }

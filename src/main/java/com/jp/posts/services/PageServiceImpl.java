@@ -12,15 +12,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 @Slf4j
 @AllArgsConstructor
-public class PageServiceImpl implements PageService{
+public class PageServiceImpl implements PageService {
 
     private final PageRepository pageRepository;
     private final UserRepository userRepository;
@@ -55,7 +57,21 @@ public class PageServiceImpl implements PageService{
 
     @Override
     public PageResponse readByTitle(String title) {
-        return null;
+        final var entityRepose = pageRepository.findByTitle(title).orElseThrow(() -> new IllegalArgumentException("Could not find title"));
+        final var pageResponse = new PageResponse();
+        BeanUtils.copyProperties(entityRepose, pageResponse);
+
+        List<PostResponse> postResponses = entityRepose.getPosts()
+                .stream()
+                .map(postEntity -> PostResponse.builder()
+                        .img(postEntity.getImg())
+                        .content(postEntity.getContent())
+                        .dateCreation(postEntity.getDateCreation())
+                        .build()
+                ).toList();
+
+        pageResponse.setPosts(postResponses);
+        return pageResponse;
     }
 
     @Override

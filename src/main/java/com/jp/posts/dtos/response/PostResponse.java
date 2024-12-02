@@ -14,5 +14,5 @@ import java.time.LocalDateTime;
 public class PostResponse {
     private LocalDateTime dateCreation;
     private String content;
-    private String image;
+    private String img;
 }
