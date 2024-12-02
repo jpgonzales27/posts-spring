@@ -7,6 +7,7 @@ import com.jp.posts.dtos.response.PostResponse;
 import com.jp.posts.entities.PageEntity;
 import com.jp.posts.repositories.PageRepository;
 import com.jp.posts.repositories.UserRepository;
+import exceptions.TitleNotValidException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +30,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse create(PageRequest pageRequest) {
+        validTitle(pageRequest.getTitle());
         /*
          * Recibimos un page DTO y lo mapeamos a una entidad
          */
@@ -76,6 +78,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse update(PageRequest pageRequest, String title) {
+        validTitle(pageRequest.getTitle());
         final var entityFromDB = this.pageRepository.findByTitle(title)
                 .orElseThrow(() -> new IllegalArgumentException("Title not found")); //Find by title and handle errors
 
@@ -114,5 +117,11 @@ public class PageServiceImpl implements PageService {
     @Override
     public void deletePost(Long idPost) {
 
+    }
+
+    private void validTitle(String title) {
+        if (title.contains("hola") || title.contains("adios")) {
+            throw new TitleNotValidException("Title cant contain bad words");
+        }
     }
 }
