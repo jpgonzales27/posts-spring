@@ -19,14 +19,23 @@ public class PostsApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        var request = PageRequest
-                .builder()
-                .userId(4L)
-                .title("Juan Gonzales")
-                .build();
+//        var request = PageRequest
+//                .builder()
+//                .userId(4L)
+//                .title("Juan Gonzales")
+//                .build();
 
 //		var response = pageService.create(request);
-        var response = pageService.readByTitle("User2 Page");
-        System.out.println(response);
+//        var response = pageService.readByTitle("User2 Page");
+
+
+//        var request = PageRequest
+//                .builder()
+//                .title("Juan Gonzales update")
+//                .build();
+//        var response = pageService.update(request,"User2 Page");
+//        System.out.println(response);
+
+        pageService.delete("User3 Page");
     }
 }
