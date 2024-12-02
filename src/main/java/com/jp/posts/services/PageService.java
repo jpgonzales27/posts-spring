@@ -12,5 +12,5 @@ public interface PageService {
     void delete(String title );
 
     PageResponse  createPost(PostRequest postRequest,String title);
-    void deletePost(Long idPost);
+    void deletePost(Long idPost,String title);
 }

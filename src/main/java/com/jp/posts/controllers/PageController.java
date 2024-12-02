@@ -59,4 +59,10 @@ public class PageController {
         return ResponseEntity.ok(this.pageService.createPost(request, title));
     }
 
+    @DeleteMapping("/{title}/post/{idPost}")
+    public ResponseEntity<Void> deletePage(@PathVariable String title, @PathVariable Long idPost) {
+        this.pageService.deletePost(idPost, title);
+        return ResponseEntity.noContent().build();
+    }
+
 }
