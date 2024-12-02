@@ -1,6 +1,7 @@
 package com.jp.posts.controllers;
 
 import com.jp.posts.dtos.request.PageRequest;
+import com.jp.posts.dtos.request.PostRequest;
 import com.jp.posts.dtos.response.PageResponse;
 import com.jp.posts.services.PageService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public class PageController {
         return ResponseEntity.created(newLocation).build();
     }
 
-    @PutMapping ("/{title}")
+    @PutMapping("/{title}")
     public ResponseEntity<PageResponse> updatePage(@PathVariable String title, @RequestBody PageRequest request) {
         return ResponseEntity.ok(this.pageService.update(request, title));
     }
@@ -52,4 +53,10 @@ public class PageController {
             return title;
         }
     }
+
+    @PostMapping("/{title}/posts")
+    public ResponseEntity<PageResponse> postPage(@RequestBody PostRequest request, @PathVariable String title) {
+        return ResponseEntity.ok(this.pageService.createPost(request, title));
+    }
+
 }

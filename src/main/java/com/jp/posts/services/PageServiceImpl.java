@@ -5,6 +5,7 @@ import com.jp.posts.dtos.request.PostRequest;
 import com.jp.posts.dtos.response.PageResponse;
 import com.jp.posts.dtos.response.PostResponse;
 import com.jp.posts.entities.PageEntity;
+import com.jp.posts.entities.PostEntity;
 import com.jp.posts.repositories.PageRepository;
 import com.jp.posts.repositories.UserRepository;
 import exceptions.TitleNotValidException;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -110,8 +110,36 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PostResponse createPost(PostRequest postRequest) {
-        return null;
+    public PageResponse createPost(PostRequest postRequest, String title) {
+        final var pageToUpdate = this.pageRepository.findByTitle(title)
+                .orElseThrow(() -> new IllegalArgumentException("Title not found")); //Find by title and handle errors
+
+        final var postEntity = new PostEntity(); // create entity to insert
+
+        BeanUtils.copyProperties(postRequest, postEntity); // copy fields from dto to entity
+        postEntity.setDateCreation(LocalDateTime.now());
+
+        pageToUpdate.addPost(postEntity);
+
+        final var responseEntity = this.pageRepository.save(pageToUpdate); // update
+
+        final var response = new PageResponse(); // create response
+        BeanUtils.copyProperties(responseEntity, response); // copy fields from objet updated
+
+        final List<PostResponse> postResponses = responseEntity.getPosts() //map posts from db -> dto(response)
+                .stream()// convert to stream
+                .map(postE ->    //transform postEntity to postResponse
+                        PostResponse
+                                .builder()
+                                .img(postE.getImg())
+                                .content(postE.getContent())
+                                .dateCreation(postE.getDateCreation())
+                                .build()
+                )
+                .toList();  // convert to list
+
+        response.setPosts(postResponses);
+        return response;
     }
 
     @Override
