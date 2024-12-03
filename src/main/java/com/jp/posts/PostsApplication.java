@@ -42,8 +42,8 @@ public class PostsApplication implements CommandLineRunner {
 
 //        pageService.delete("User3 Page");
 
-        var password = "secret"; //mail & password
-        var passwordEncoded = this.passwordEncoder.encode(password);
-        System.out.println(passwordEncoded);
+//        var password = "secret"; //mail & password
+//        var passwordEncoded = this.passwordEncoder.encode(password);
+//        System.out.println(passwordEncoded);
     }
 }
