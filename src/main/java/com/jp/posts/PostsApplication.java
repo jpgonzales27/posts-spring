@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class PostsApplication implements CommandLineRunner {
 
+//    @Autowired
+//    private PageService pageService;
+
     @Autowired
-    private PageService pageService;
+    private PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(PostsApplication.class, args);
@@ -37,5 +41,9 @@ public class PostsApplication implements CommandLineRunner {
 //        System.out.println(response);
 
 //        pageService.delete("User3 Page");
+
+        var password = "secret"; //mail & password
+        var passwordEncoded = this.passwordEncoder.encode(password);
+        System.out.println(passwordEncoded);
     }
 }
