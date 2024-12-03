@@ -8,8 +8,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/page")
@@ -65,4 +71,32 @@ public class PageController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/img/upload")
+    public ResponseEntity<String> upload(@RequestParam(value = "file") MultipartFile file) {
+
+        try {
+            // Ruta relativa al proyecto (puedes ajustarla según tus necesidades).
+            String baseDir = System.getProperty("user.dir") + File.separator + "src" + File.separator +
+                    "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img";
+
+            Path path = Paths.get(baseDir);
+
+            // Crear el directorio si no existe.
+            if (!Files.exists(path)) {
+                Files.createDirectories(path); // createDirectories para crear múltiples directorios si es necesario.
+            }
+
+            // Nombre completo del archivo.
+            String fullName = path.toString() + File.separator + file.getOriginalFilename();
+
+            // Guardar el archivo.
+            file.transferTo(new File(fullName));
+
+            return ResponseEntity.ok("Upload success on: " + fullName);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Cannot upload image");
+        }
+    }
 }
